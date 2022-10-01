@@ -1,10 +1,27 @@
 const menuEmail = document.querySelector( '.navbar-email' )
 const desktopMenu = document.querySelector( '.desktop-menu' )
 const menuCartIcon = document.querySelector( '.navbar-shopping-cart' )
+const productDetailCloseIcon = document.querySelector( '.product-detail-close' )
 const burgerMenu = document.querySelector( '.menu' )
 const mobileMenu = document.querySelector( '.mobile-menu' )
-const aside = document.querySelector( '.product-detail' )
+const shoppingCartContainer = document.querySelector( '#shopping-cart-container' )
+const productDetailContainer = document.querySelector( '#product-detail' )
 const cardsContainer = document.querySelector( '.cards-container' )
+const productDetailImage = document.querySelector( '#product-detail-image' )
+
+const closeProductDetailAside = () => {
+    productDetailContainer.classList.add( 'inactive' )
+}
+
+const openProductDetailAside = ( image ) => {
+
+    shoppingCartContainer.classList.add( 'inactive' )
+
+    productDetailContainer.classList.remove( 'inactive' )
+
+    productDetailImage.setAttribute( 'src', image )
+    productDetailImage.style.opacity = .8
+}
 
 const renderProducts = ( products ) => {
     for ( const product of products ) {
@@ -14,6 +31,7 @@ const renderProducts = ( products ) => {
 
         const img = document.createElement( 'img' )
         img.setAttribute( 'src', product.image )
+        img.addEventListener( 'click', () => openProductDetailAside( product.image ) )
 
         const productInfo = document.createElement( 'div' )
         productInfo.classList.add( 'product-info' )
@@ -66,10 +84,10 @@ productsList.push( {
 
 const handleToggleDesktopMenu = () => {
 
-    const isAsideClosed = aside.classList.contains( 'inactive' )
+    const isAsideClosed = shoppingCartContainer.classList.contains( 'inactive' )
 
     if ( !isAsideClosed ) {
-        aside.classList.add( 'inactive' )
+        shoppingCartContainer.classList.add( 'inactive' )
     }
 
     desktopMenu.classList.toggle( 'inactive' )
@@ -78,21 +96,28 @@ const handleToggleDesktopMenu = () => {
 const handleToggleCartAside = () => {
 
     const isMobileMenuClosed = mobileMenu.classList.contains( 'inactive' )
+    const isProductDetailClosed = productDetailContainer.classList.contains( 'inactive' )
 
     if ( !isMobileMenuClosed ) {
         mobileMenu.classList.add( 'inactive' )
     }
 
-    aside.classList.toggle( 'inactive' )
+    if ( !isProductDetailClosed ) {
+        productDetailContainer.classList.add( 'inactive' )
+    }
+
+    shoppingCartContainer.classList.toggle( 'inactive' )
 }
 
 const handleToggleMobileMenu = () => {
 
-    const isAsideClosed = aside.classList.contains( 'inactive' )
+    const isAsideClosed = shoppingCartContainer.classList.contains( 'inactive' )
 
     if ( !isAsideClosed ) {
-        aside.classList.add( 'inactive' )
+        shoppingCartContainer.classList.add( 'inactive' )
     }
+
+    closeProductDetailAside()
 
     mobileMenu.classList.toggle( 'inactive' )
 }
@@ -102,5 +127,7 @@ menuEmail.addEventListener( 'click', handleToggleDesktopMenu )
 menuCartIcon.addEventListener( 'click', handleToggleCartAside )
 
 burgerMenu.addEventListener( 'click', handleToggleMobileMenu )
+
+productDetailCloseIcon.addEventListener( 'click', closeProductDetailAside )
 
 renderProducts( productsList )
